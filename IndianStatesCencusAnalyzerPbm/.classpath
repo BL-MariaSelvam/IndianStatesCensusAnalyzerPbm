@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="C:/Users/sathi/Downloads/commons-collections4-4.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/sathi/Downloads/gson-2.10.jar"/>
 	<classpathentry kind="lib" path="C:/Users/sathi/Downloads/opencsv-5.9.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
