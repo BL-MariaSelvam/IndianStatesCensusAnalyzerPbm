@@ -11,13 +11,15 @@ import main.java.CensusAnalyserException;
 
 public class CSVStateCensus {
 
+    private static final int EXPECTED_COLUMN_COUNT = 4;
+
     public Iterator<StateCensus> loadCSVData(String csvFilePath)
             throws CensusAnalyserException {
 
-        // File type validation (Sad Case trigger)
+        // File type check
         if (!csvFilePath.endsWith(".csv")) {
             throw new CensusAnalyserException(
-                    "Incorrect file type",
+                    "Invalid file type",
                     CensusAnalyserException.ExceptionType.INVALID_FILE_TYPE);
         }
 
@@ -25,11 +27,27 @@ public class CSVStateCensus {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
 
-            reader.readLine(); // skip header
-            String line;
+            String header = reader.readLine();
+            String[] headerColumns = header.split(",");
 
+            // Header delimiter validation
+            if (headerColumns.length != EXPECTED_COLUMN_COUNT) {
+                throw new CensusAnalyserException(
+                        "Incorrect delimiter in CSV file",
+                        CensusAnalyserException.ExceptionType.CSV_PARSING_ERROR);
+            }
+
+            String line;
             while ((line = reader.readLine()) != null) {
+
                 String[] data = line.split(",");
+
+                // Data delimiter validation
+                if (data.length != EXPECTED_COLUMN_COUNT) {
+                    throw new CensusAnalyserException(
+                            "Incorrect delimiter in CSV file",
+                            CensusAnalyserException.ExceptionType.CSV_PARSING_ERROR);
+                }
 
                 StateCensus census = new StateCensus(
                         data[0],
@@ -44,9 +62,12 @@ public class CSVStateCensus {
             throw new CensusAnalyserException(
                     "File not found",
                     CensusAnalyserException.ExceptionType.FILE_NOT_FOUND);
+        } catch (NumberFormatException e) {
+            throw new CensusAnalyserException(
+                    "CSV parsing error",
+                    CensusAnalyserException.ExceptionType.CSV_PARSING_ERROR);
         }
 
         return censusList.iterator();
     }
 }
-
