@@ -9,14 +9,14 @@ public class StateCensusAnalyser {
 	 public int loadIndianStateCensusData(String csvFilePath)
 	            throws CensusAnalyserException {
 
-	        CSVStateCensus csvLoader = new CSVStateCensus();
-	        Iterator<StateCensus> iterator = csvLoader.loadCSVData(csvFilePath);
+	        CSVStateCensus loader = new CSVStateCensus();
+	        Iterator<StateCensus> iterator = loader.loadCSVData(csvFilePath);
 
-	        int recordCount = 0;
+	        int count = 0;
 	        while (iterator.hasNext()) {
 	            iterator.next();
-	            recordCount++;
+	            count++;
 	        }
-	        return recordCount;
+	        return count;
 	    }
 }

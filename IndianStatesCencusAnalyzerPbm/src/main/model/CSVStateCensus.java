@@ -1,22 +1,20 @@
 package main.model;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import main.java.CensusAnalyserException;
 
 public class CSVStateCensus {
 
-    private static final int EXPECTED_COLUMN_COUNT = 4;
+    private static final String EXPECTED_HEADER =
+            "State,Population,AreaInSqKm,DensityPerSqKm";
 
     public Iterator<StateCensus> loadCSVData(String csvFilePath)
             throws CensusAnalyserException {
 
-        // File type check
+        // File type validation
         if (!csvFilePath.endsWith(".csv")) {
             throw new CensusAnalyserException(
                     "Invalid file type",
@@ -28,13 +26,12 @@ public class CSVStateCensus {
         try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
 
             String header = reader.readLine();
-            String[] headerColumns = header.split(",");
 
-            // Header delimiter validation
-            if (headerColumns.length != EXPECTED_COLUMN_COUNT) {
+            // Header validation (Sad Case trigger)
+            if (!EXPECTED_HEADER.equals(header)) {
                 throw new CensusAnalyserException(
-                        "Incorrect delimiter in CSV file",
-                        CensusAnalyserException.ExceptionType.CSV_PARSING_ERROR);
+                        "Incorrect CSV header",
+                        CensusAnalyserException.ExceptionType.CSV_HEADER_ERROR);
             }
 
             String line;
@@ -42,10 +39,9 @@ public class CSVStateCensus {
 
                 String[] data = line.split(",");
 
-                // Data delimiter validation
-                if (data.length != EXPECTED_COLUMN_COUNT) {
+                if (data.length != 4) {
                     throw new CensusAnalyserException(
-                            "Incorrect delimiter in CSV file",
+                            "CSV parsing error",
                             CensusAnalyserException.ExceptionType.CSV_PARSING_ERROR);
                 }
 
