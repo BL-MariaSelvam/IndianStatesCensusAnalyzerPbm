@@ -2,21 +2,21 @@ package main.model;
 
 import java.util.Iterator;
 
+import main.java.CensusAnalyserException;
+
 public class StateCensusAnalyser {
 
-    private int recordCount = 0;
+	 public int loadIndianStateCensusData(String csvFilePath)
+	            throws CensusAnalyserException {
 
-    public int loadIndianStateCensusData(String csvFilePath) throws Exception {
+	        CSVStateCensus csvLoader = new CSVStateCensus();
+	        Iterator<StateCensus> iterator = csvLoader.loadCSVData(csvFilePath);
 
-        CSVStateCensus csvLoader = new CSVStateCensus();
-        Iterator<StateCensus> censusIterator = csvLoader.loadCSVData(csvFilePath);
-
-        recordCount = 0;
-        while (censusIterator.hasNext()) {
-            censusIterator.next();
-            recordCount++;
-        }
-
-        return recordCount;
-    }
+	        int recordCount = 0;
+	        while (iterator.hasNext()) {
+	            iterator.next();
+	            recordCount++;
+	        }
+	        return recordCount;
+	    }
 }
