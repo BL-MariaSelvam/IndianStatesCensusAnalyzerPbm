@@ -14,28 +14,22 @@ public class CSVStateCensus {
     public Iterator<StateCensus> loadCSVData(String csvFilePath)
             throws CensusAnalyserException {
 
-        List<StateCensus> censusList = new ArrayList<>();
-
-        // Validate file type
+        // File type validation (Sad Case trigger)
         if (!csvFilePath.endsWith(".csv")) {
             throw new CensusAnalyserException(
-                    "Invalid file type",
+                    "Incorrect file type",
                     CensusAnalyserException.ExceptionType.INVALID_FILE_TYPE);
         }
 
+        List<StateCensus> censusList = new ArrayList<>();
+
         try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
 
+            reader.readLine(); // skip header
             String line;
-            reader.readLine(); // Skip header
 
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
-
-                if (data.length != 4) {
-                    throw new CensusAnalyserException(
-                            "Invalid CSV format",
-                            CensusAnalyserException.ExceptionType.CSV_PARSING_ERROR);
-                }
 
                 StateCensus census = new StateCensus(
                         data[0],
@@ -50,12 +44,9 @@ public class CSVStateCensus {
             throw new CensusAnalyserException(
                     "File not found",
                     CensusAnalyserException.ExceptionType.FILE_NOT_FOUND);
-        } catch (NumberFormatException e) {
-            throw new CensusAnalyserException(
-                    "CSV parsing error",
-                    CensusAnalyserException.ExceptionType.CSV_PARSING_ERROR);
         }
 
         return censusList.iterator();
     }
 }
+
